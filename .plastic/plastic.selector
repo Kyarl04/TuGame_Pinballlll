@@ -1,0 +1,4 @@
+repository "Repository25_TuGame_Pinball 2026-04-06_14-09-19/Repository25_TuGame_Pinball@14569061541626@cloud"
+  path "/"
+    br "/main"
+    co "/main"
