@@ -55,10 +55,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DotSize: 1.55
+    - _Color_Intensity: 1
+    - _Color_Power: 1
+    - _DotSize: 1.52
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Scale: 20.99
+    - _Scale: 20.6
     - _Scale_1: 0
     - _Shading1: 0.301
     - _Shading2: 0.559
