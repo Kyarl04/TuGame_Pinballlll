@@ -3,133 +3,88 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// Hold all the code that dictates what the plunger
-/// </summary>
 public class PlungerBehavior : MonoBehaviour
 {
-    /// <summary>
-    ///  Value that holds the current force
-    /// </summary>
     float force;
-
-    /// <summary>
-    ///  Minimum force that can be applied to the plunger
-    /// </summary>
     float minForce = 0f;
-
-    /// <summary>
-    /// Maximum force that can be applied to the plunger
-    /// </summary>
     public float maxForce = 100;
-
-    /// <summary>
-    /// Create a refrence to the slider
-    /// </summary>
     public Slider slider;
-
-    /// <summary>
-    /// Create a list of rigidbodies
-    /// </summary>
     List<Rigidbody> ally;
-
-    /// <summary>
-    /// Create a bool for the ball
-    /// </summary>
     bool ball;
 
-    /// <summary>
-    /// Start is called before the first frame update
-    /// </summary>
+    [Header("Launch Effect Settings")]
+    [SerializeField] private GameObject launchEffect;      // 발사 시 터질 이펙트 프리팹
+    [SerializeField] private Transform launchPoint;        // 이펙트가 생성될 위치
+    [SerializeField] private float effectDestroyTime = 2f; // 이펙트 자동 삭제 시간
+
     void Start()
     {
-        //Set the minimum and maximum slider values
         slider.minValue = 0f;
         slider.maxValue = maxForce;
         ally = new List<Rigidbody>();
     }
 
-    /// <summary>
-    /// Update is called once per frame
-    /// </summary>
     void Update()
     {
-        //If we have the ball
-        if(ball)
-        {
-            //Set the slider to be active
-            slider.gameObject.SetActive(true);
-        }
-        //If we don't have the ball
-        else
-        {
-            //Set the slider to be disabled
-            slider.gameObject.SetActive(false);
-        }
+        if(ball) slider.gameObject.SetActive(true);
+        else slider.gameObject.SetActive(false);
 
-        //Set the sliders value to be force
         slider.value = force;
 
-        //If the ally count is greater than zero
         if(ally.Count > 0)
         {
-            //Set the ball to be true
             ball = true;
 
-            //If the mouse0 is pressed down
+            // 차징 중 (마우스 누르고 있을 때)
             if(Input.GetKey(KeyCode.Mouse0))
             {
-                //If the force is less than or equel to the maxForce
                 if(force <= maxForce)
                 {
-                    //force plus equels 50 multiplied by Time.deltaTime
                     force += 500 * Time.deltaTime;
                 }
             }
 
-            //If mouse0 is not pressed
+            // 발사 (마우스 버튼을 뗄 때)
             if (Input.GetKeyUp(KeyCode.Mouse0))
             {
-                //Foreach rigidbody in the ally list
+                // 1. 발사 이펙트 생성 (추가된 로직)
+                if (launchEffect != null)
+                {
+                    Vector3 spawnPos = launchPoint != null ? launchPoint.position : transform.position;
+                    // 발사대 방향(Vector3.forward)으로 이펙트 생성
+                    GameObject effectInstance = Instantiate(launchEffect, spawnPos, Quaternion.LookRotation(Vector3.forward));
+                    Destroy(effectInstance, effectDestroyTime);
+                }
+
+                // 2. 물리적인 힘 가하기
                 foreach(Rigidbody rigi in ally)
                 {
-                    //Add force to the rigi
                     rigi.AddForce(force * Vector3.forward);
                 }
+                
+                // 발사 후 힘 초기화
+                force = 0f;
             }
         }
         else
         {
-            //Set the ball to be false and the force to zero
             ball = false;
             force = 0f;
         }
     }
 
-    /// <summary>
-    /// When something enters the trigger
-    /// </summary>
-    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        //If the tag is Player
         if(other.CompareTag("Player"))
         {
-            //Add the Player to the ally list
             ally.Add(other.GetComponent<Rigidbody>());
         }
     }
 
-    /// <summary>
-    ///  When something exits the trigger
-    /// </summary>
-    /// <param name="other"></param>
     private void OnTriggerExit(Collider other)
     {
-        //If the tag is Player
         if (other.CompareTag("Player"))
         {
-            //Remove the Player from the list and set force to 0
             ally.Remove(other.GetComponent<Rigidbody>());
             force = 0f;
         }

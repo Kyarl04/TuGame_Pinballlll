@@ -9,8 +9,9 @@ public class RolloverBehavior : MonoBehaviour
     [SerializeField] private float bonusScore = 10f;        // 통과 시 줄 점수
 
     [Header("Effect Settings")]
-    [SerializeField] private GameObject passEffect;         // 재생할 파티클 프리팹
-    [SerializeField] private Transform effectPosition;      // 이펙트가 나타날 위치 (비워두면 본인 위치)
+    [SerializeField] private GameObject passEffect;         // 재생할 파티클 이펙트
+    [SerializeField] private float effectDestroyTime = 2.0f; // 이펙트 자동 삭제 시간
+    [SerializeField] private Transform effectPosition;      // 이펙트 생성 위치 (비워두면 본인 위치)
 
     [Header("Sound Settings")]
     [SerializeField] private AudioSource audioSource;       // 사운드 재생기
@@ -27,17 +28,19 @@ public class RolloverBehavior : MonoBehaviour
                 scoreKeep.score += bonusScore;
             }
 
-            // 2. 이펙트 생성
+            // 2. 위치 결정
+            Vector3 spawnPos = effectPosition != null ? effectPosition.position : transform.position;
+
+            // 3. 파티클 이펙트 생성
             if (passEffect != null)
             {
-                Vector3 spawnPos = effectPosition != null ? effectPosition.position : transform.position;
-                GameObject effectInstance = Instantiate(passEffect, spawnPos, Quaternion.identity);
-                
-                // 2초 뒤 이펙트 자동 삭제 (메모리 관리)
-                Destroy(effectInstance, 2.0f);
+                // Quaternion.identity 대신 transform.rotation을 사용하면 
+                // 해당 오브젝트의 회전값을 이펙트가 그대로 따라가게 할 수 있습니다.
+                GameObject vfxInstance = Instantiate(passEffect, spawnPos, transform.rotation);
+                Destroy(vfxInstance, effectDestroyTime);
             }
 
-            // 3. 사운드 재생
+            // 4. 사운드 재생
             if (audioSource != null && passSound != null)
             {
                 audioSource.PlayOneShot(passSound);
