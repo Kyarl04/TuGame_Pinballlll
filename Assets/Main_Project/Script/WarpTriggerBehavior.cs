@@ -4,45 +4,50 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Holds the code that allows the player to warp back inside the plunger
-/// decrement the players lives when the trigger activated
-/// end the game when the players lives is equel to 0
+/// 공이 바닥에 닿았을 때 워프시키고 목숨을 깎으며, 지정된 위치에서 이펙트를 발생시킵니다.
 /// </summary>
 public class WarpTriggerBehavior : MonoBehaviour
 {
-    [SerializeField]
-    // Postion of the warp point
-    private Vector3 warpPos;
+    [SerializeField] private Vector3 warpPos;
+    [SerializeField] private ValueKeepingBehavior liveValue;
 
-    [SerializeField]
-    // Get refrence to the valueKeepingBehavior
-    private ValueKeepingBehavior liveValue;
+    [Header("Death Effect Settings")]
+    [SerializeField] private GameObject deathEffect;       // 공이 죽을 때 터질 이펙트 프리팹
+    [SerializeField] private Transform deathEffectTransform; // 이펙트가 발생할 특정 위치 (추가됨)
+    [SerializeField] private float effectDestroyTime = 2.0f; // 이펙트 삭제 시간
 
     private void OnTriggerEnter(Collider other)
     {
-        // If the tag is Player
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player")) //
         {
-            // Create reference to get the players rigidbody
-            Rigidbody playerRigi;
-            playerRigi = other.GetComponent<Rigidbody>();
+            // 1. 지정된 위치에서 죽음 이펙트 생성 (수정된 로직)
+            if (deathEffect != null)
+            {
+                // deathEffectTransform이 지정되어 있으면 그 위치에, 없으면 이 트리거의 위치에 생성합니다.
+                Vector3 spawnPos = deathEffectTransform != null ? deathEffectTransform.position : transform.position;
+                Quaternion spawnRot = deathEffectTransform != null ? deathEffectTransform.rotation : Quaternion.identity;
 
-            // Reset the players momentum
-            playerRigi.linearVelocity = Vector3.zero;
-            playerRigi.angularVelocity = Vector3.zero;
+                GameObject effectInstance = Instantiate(deathEffect, spawnPos, spawnRot);
+                Destroy(effectInstance, effectDestroyTime);
+            }
 
-            // Move the player to the warp position
-            playerRigi.position = warpPos;
+            // 2. 플레이어 물리 상태 리셋 및 워프
+            Rigidbody playerRigi = other.GetComponent<Rigidbody>();
+            if (playerRigi != null)
+            {
+                playerRigi.linearVelocity = Vector3.zero; //
+                playerRigi.angularVelocity = Vector3.zero; //
+                playerRigi.position = warpPos; //
+            }
 
-            // Decrease the players lice count
-            liveValue.lives--;
+            // 3. 라이프 감소
+            liveValue.lives--; //
         }
 
-        // If the player runs out of lives
-        if (liveValue.lives == 0)
+        // 4. 게임 오버 체크
+        if (liveValue.lives <= 0) //
         {
-            // Load the Game Over scene
-            SceneManager.LoadScene(3);
+            SceneManager.LoadScene(3); //
         }
     }
 }
