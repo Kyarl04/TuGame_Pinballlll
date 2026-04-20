@@ -55,6 +55,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Color_Intensity: 1
+    - _Color_Power: 1
     - _DotSize: 1.2
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -66,7 +68,7 @@ Material:
     - _Thickness: 0.002
     m_Colors:
     - _Color: {r: 1, g: 0, b: 0, a: 1}
-    - _DotColor: {r: 0.19298673, g: 0.36740822, b: 0.5245282, a: 1}
+    - _DotColor: {r: 0.105820596, g: 0.3759074, b: 0.7735849, a: 1}
     - _LightDir: {r: 1, g: 0.69, b: 0.9, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

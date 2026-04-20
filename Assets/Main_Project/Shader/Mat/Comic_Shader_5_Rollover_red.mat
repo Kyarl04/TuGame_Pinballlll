@@ -55,7 +55,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Color_Intensity: 11.24
+    - _Color_Intensity: 15
     - _Color_Power: 1.9
     - _DotSize: 1
     - _QueueControl: 0
