@@ -1,63 +1,57 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Holds the code that allows the flippers to function
-/// </summary>
 public class FlipperBehavior : MonoBehaviour
 {
-    /// <summary>
-    /// Resting position of the flipper
-    /// </summary>
-    public float stillPoaition = 0.0f;
+    // 기존 변수명들을 유지하면서 로직만 수정했습니다.
+    public float restPosition = 0f;
+    public float pressedPosition = 45f;
+    public float hitStrength = 10000f;
+    public float flipperDamper = 150f;
 
-    /// <summary>
-    /// Poaition to be moved to when pressed
-    /// </summary>
-    public float pressPosition = 45.0f;
+    public AudioSource audioSource;
+    public AudioClip hitSound;
+    
+    // 이 변수는 인스펙터에서 'Space'라고 입력하거나 
+    // 아래 Update문처럼 직접 KeyCode를 써도 됩니다.
+    public string inputName; 
 
-    /// <summary>
-    /// Force applied to the flipper when presssed
-    /// </summary>
-    public float force = 1000.0f;
+    private HingeJoint hinge;
 
-    /// <summary>
-    /// Stores the name of the input entered
-    /// </summary>
-    public string inputName;
-
-    /// <summary>
-    /// Refrence to the HingeJoint
-    /// </summary>
-    HingeJoint hinge;
-
-    /// <summary>
-    ///  Start is called before the first frame update
-    /// </summary>
     void Start()
     {
         hinge = GetComponent<HingeJoint>();
         hinge.useSpring = true;
     }
 
-    /// <summary>
-    /// Update is called once per frame
-    /// </summary>
     void Update()
     {
-        JointSpring spring = new JointSpring();
-        spring.spring = force * Time.deltaTime;
+        JointSpring spr = hinge.spring;
 
-        if(Input.GetAxis(inputName) == 1)
+        // 1. inputName을 사용하거나, 확실하게 하려면 KeyCode.Space를 사용하세요.
+        // Input.GetAxis보다 Input.GetKey가 핀볼 플리퍼 반응속도에 더 적합합니다.
+        if (Input.GetKey(KeyCode.Space) || (!string.IsNullOrEmpty(inputName) && Input.GetButton(inputName)))
         {
-            spring.targetPosition = pressPosition;
+            spr.targetPosition = pressedPosition;
         }
         else
         {
-            spring.targetPosition = stillPoaition;
+            spr.targetPosition = restPosition;
         }
-        hinge.spring = spring;
-        hinge.useLimits = true;
+
+        // 설정한 스프링 값을 다시 힌지에 적용
+        spr.spring = hitStrength;
+        spr.damper = flipperDamper;
+        hinge.spring = spr;
     }
+
+    private void OnCollisionEnter(Collision collision) 
+    {
+        if (collision.gameObject.CompareTag("Player")) 
+        {
+            audioSource.PlayOneShot(hitSound);
+        }
+    }
+
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class WarpTriggerBehavior : MonoBehaviour
@@ -13,11 +11,22 @@ public class WarpTriggerBehavior : MonoBehaviour
     [SerializeField] private Transform deathEffectTransform; 
     [SerializeField] private float effectDestroyTime = 2.0f; 
 
+    public AudioSource audioSource;
+    public AudioClip deathSound;
+
+    void Start()
+    {
+        // 인스펙터에서 연결이 누락되었을 경우를 대비해 직접 찾습니다.
+        if (liveValue == null)
+        {
+            liveValue = FindObjectOfType<ValueKeepingBehavior>();
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            // 1. 이펙트 생성
             if (deathEffect != null)
             {
                 Vector3 spawnPos = deathEffectTransform != null ? deathEffectTransform.position : transform.position;
@@ -26,29 +35,28 @@ public class WarpTriggerBehavior : MonoBehaviour
                 Destroy(effectInstance, effectDestroyTime);
             }
 
-            // 2. 물리 리셋 및 워프
             Rigidbody playerRigi = other.GetComponent<Rigidbody>();
             if (playerRigi != null)
             {
-                playerRigi.linearVelocity = Vector3.zero; 
+                // 2021 버전은 linearVelocity 대신 velocity를 사용합니다.
+                playerRigi.velocity = Vector3.zero; 
                 playerRigi.angularVelocity = Vector3.zero; 
                 playerRigi.position = warpPos; 
             }
 
-            // 3. 라이프 감소 및 체크
+            audioSource.PlayOneShot(deathSound);
             liveValue.lives--; 
             
             if (liveValue.lives <= 0)
             {
-                // 유니티 6 권장 API: FindFirstObjectByType 사용
-                MainMenuBehavior mainMenu = Object.FindFirstObjectByType<MainMenuBehavior>();
+                // 2021 버전에서는 FindFirstObjectByType 대신 FindObjectOfType을 사용합니다.
+                MainMenuBehavior mainMenu = FindObjectOfType<MainMenuBehavior>();
                 if (mainMenu != null)
                 {
                     mainMenu.ShowRestartPanel();
                 }
                 else
                 {
-                    // 패널을 찾을 수 없는 경우 안전장치로 씬 전환
                     SceneManager.LoadScene(3);
                 }
             }

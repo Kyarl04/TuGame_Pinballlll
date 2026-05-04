@@ -12,6 +12,9 @@ public class PlungerBehavior : MonoBehaviour
     List<Rigidbody> ally;
     bool ball;
 
+    public AudioSource audioSource;
+    public AudioClip launchSound;
+
     [Header("Launch Effect Settings")]
     [SerializeField] private GameObject launchEffect;      
     [SerializeField] private Transform launchPoint;        
@@ -56,6 +59,7 @@ public class PlungerBehavior : MonoBehaviour
                 foreach(Rigidbody rigi in ally)
                 {
                     rigi.AddForce(force * Vector3.forward);
+                    audioSource.PlayOneShot(launchSound);
                 }
                 
                 force = 0f;

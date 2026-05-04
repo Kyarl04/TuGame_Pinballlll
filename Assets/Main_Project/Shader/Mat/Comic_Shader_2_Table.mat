@@ -21,9 +21,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Comic_Shader_2_Table
-  m_Shader: {fileID: -6465566751694194690, guid: 8d2315a9f697e994780e384beebdb550, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
+  m_Shader: {fileID: -6465566751694194690, guid: 8d2315a9f697e994780e384beebdb550,
+    type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -33,7 +32,6 @@ Material:
   stringTagMap: {}
   disabledShaderPasses:
   - MOTIONVECTORS
-  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -57,18 +55,17 @@ Material:
     m_Floats:
     - _Color_Intensity: 1
     - _Color_Power: 1
-    - _DotSize: 1.52
+    - _DotSize: 1.04
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Scale: 20.6
+    - _Scale: 17.62
     - _Scale_1: 0
-    - _Shading1: 0.301
-    - _Shading2: 0.559
+    - _Shading1: 0.252
+    - _Shading2: 0.622
     - _Size: 0
     - _Thickness: 0.002
     m_Colors:
     - _Color: {r: 1, g: 0, b: 0, a: 1}
-    - _DotColor: {r: 0.2729441, g: 0.28460294, b: 0.3207547, a: 1}
+    - _DotColor: {r: 0.4037736, g: 0.4037736, b: 0.4037736, a: 1}
     - _LightDir: {r: 1, g: 0.69, b: 0.9, a: 0}
   m_BuildTextureStacks: []
-  m_AllowLocking: 1

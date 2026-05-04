@@ -21,9 +21,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Comic_Shader_5_Rollover_Sub
-  m_Shader: {fileID: -6465566751694194690, guid: 8d2315a9f697e994780e384beebdb550, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
+  m_Shader: {fileID: -6465566751694194690, guid: 8d2315a9f697e994780e384beebdb550,
+    type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -33,7 +32,6 @@ Material:
   stringTagMap: {}
   disabledShaderPasses:
   - MOTIONVECTORS
-  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -55,7 +53,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Color_Intensity: 15.9
+    - _Color_Intensity: 7.78
     - _Color_Power: 1
     - _DotSize: 1
     - _QueueControl: 0
@@ -68,7 +66,6 @@ Material:
     - _Thickness: 0.002
     m_Colors:
     - _Color: {r: 1, g: 0, b: 0, a: 1}
-    - _DotColor: {r: 0.18431371, g: 0.30709082, b: 0.7058824, a: 1}
+    - _DotColor: {r: 0.6464872, g: 0.3122463, b: 0.9245283, a: 0.79607844}
     - _LightDir: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
-  m_AllowLocking: 1
